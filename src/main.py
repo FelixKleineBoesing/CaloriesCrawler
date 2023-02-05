@@ -41,17 +41,22 @@ def get_food_informations(item: str):
         # subset the product_soup to only the dev with the class "rightblock"
         right_block = product_soup.find("div", class_="rightblue-complete")
         # get from right block the string from the first div with class "serva"
-        serving_size = right_block.find("div", class_="serva").find("a").string
+        serving_size_text = right_block.find("div", class_="serva").find("a").string
+        serving_size = serving_size_text.split("(")[-1][:-1]
+        value, unit = serving_size.split(" ")
         # get the string from the h1 heading with id "fddb-headline1"
         product_name = product_soup.find("h1", id="fddb-headline1").string
         return {
             "product_name": product_name,
-            "serving_size": serving_size,
+            "serving_size_text": serving_size_text,
+            "serving_value": value,
+            "serving_unit": unit,
             "calories": calories,
             "protein": protein,
             "fat": fat,
             "carbs": carbs,
-            "relation": relation
+            "relation": relation,
+            "product_link": product_link,
         }
 
 
