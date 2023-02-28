@@ -1,16 +1,5 @@
-# This program scrapes the information from yazio.com to get calories and other informations about food items
-
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
-import time
-
-BASE_URL = "https://fddb.info"
-SEARCH_URL = "https://fddb.info/db/de/suche/?udd=0&cat=site-de&search={}"
-
-
-def main():
-    food_items = []
 
 
 def get_food_informations(item: str):
@@ -48,7 +37,6 @@ def get_food_informations(item: str):
         product_name = product_soup.find("h1", id="fddb-headline1").string
         return {
             "product_name": product_name,
-            "serving_size_text": serving_size_text,
             "serving_value": value,
             "serving_unit": unit,
             "calories": calories,
@@ -60,5 +48,5 @@ def get_food_informations(item: str):
         }
 
 
-if __name__ == "__main__":
-    get_food_informations("Apfel")
+BASE_URL = "https://fddb.info"
+SEARCH_URL = "https://fddb.info/db/de/suche/?udd=0&cat=site-de&search={}"

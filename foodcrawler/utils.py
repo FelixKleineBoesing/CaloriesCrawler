@@ -8,7 +8,7 @@ def convert_column_number_to_excel_column_name(column_number: int) -> str:
     return column_name
 
 
-def get_sum_formulas(number_columns: int) -> list:
+def get_sum_formulas(number_columns: int):
     starts = [17, 18, 19, 20]
     steps = 7
     single_columns = [[start + i * steps for i in range(number_columns)] for start in starts]
