@@ -1,5 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+import re
+
+
+def keep_numerical_values(string: str):
+    return float(re.sub("[^0-9]", "", string))
 
 
 def get_food_informations(item: str):
@@ -21,11 +26,18 @@ def get_food_informations(item: str):
         calories_table = product_soup.find("div", class_="standardcontent")
         # get the value of the div after the div with the value "Kalorien"
         calories = calories_table.find("div", text="Kalorien").find_next("div").string
+        calories = keep_numerical_values(calories)
+
         protein = calories_table.find("div", text="Protein").find_next("div").string
+        protein = keep_numerical_values(protein)
         fat = calories_table.find("div", text="Fett").find_next("div").string
+        fat = keep_numerical_values(fat)
+
         carbs = calories_table.find("div", text="Kohlenhydrate").find_next("div").string
+        carbs = keep_numerical_values(carbs)
         # get string of the div witht the class "itemsec2012"
         relation = calories_table.find("div", class_="itemsec2012").string
+        relation_numerical = keep_numerical_values(relation)
 
         # subset the product_soup to only the dev with the class "rightblock"
         right_block = product_soup.find("div", class_="rightblue-complete")
@@ -35,6 +47,7 @@ def get_food_informations(item: str):
         value, unit = serving_size.split(" ")
         # get the string from the h1 heading with id "fddb-headline1"
         product_name = product_soup.find("h1", id="fddb-headline1").string
+
         return {
             "product_name": product_name,
             "serving_value": value,
@@ -44,6 +57,7 @@ def get_food_informations(item: str):
             "fat": fat,
             "carbs": carbs,
             "relation": relation,
+            "relation_numerical": relation_numerical,
             "product_link": product_link,
         }
 
