@@ -8,6 +8,11 @@ from tqdm import tqdm
 from foodcrawler.parsing import get_food_informations
 
 
+DATA_SOURCES = {
+    "fddb": get_food_informations,
+}
+
+
 def main():
     assert len(sys.argv) >= 2, "Please provide the workbook name as argument top the executable"
     workbook_name = sys.argv[1]

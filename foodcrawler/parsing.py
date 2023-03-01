@@ -3,12 +3,16 @@ from bs4 import BeautifulSoup
 import re
 
 
+FDDB_BASE_URL = "https://fddb.info"
+FDDB_SEARCH_URL = "https://fddb.info/db/de/suche/?udd=0&cat=site-de&search={}"
+
+
 def keep_numerical_values(string: str):
     return float(re.sub("[^0-9]", "", string))
 
 
 def get_food_informations(item: str):
-    search_url = SEARCH_URL.format(item)
+    search_url = FDDB_SEARCH_URL.format(item)
     search_page = requests.get(search_url)
     search_soup = BeautifulSoup(search_page.content, "html.parser")
     # find the first result from a table which has a link with "/lebensmittel/" in it
@@ -17,7 +21,7 @@ def get_food_informations(item: str):
     for table in tables:
         product_link = table.find("a", href=lambda href: href and "/db/de/lebensmittel/" in href)
         if product_link is not None:
-            product_link = BASE_URL + product_link.attrs["href"]
+            product_link = FDDB_BASE_URL + product_link.attrs["href"]
             break
     if product_link is not None:
         product_html = requests.get(product_link)
@@ -61,6 +65,3 @@ def get_food_informations(item: str):
             "product_link": product_link,
         }
 
-
-BASE_URL = "https://fddb.info"
-SEARCH_URL = "https://fddb.info/db/de/suche/?udd=0&cat=site-de&search={}"
