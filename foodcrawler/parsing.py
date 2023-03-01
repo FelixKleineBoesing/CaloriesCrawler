@@ -4,7 +4,8 @@ import re
 
 
 def keep_numerical_values(string: str):
-    return float(re.sub("[^0-9]", "", string))
+    # keep only numerical values and comma as decimal separator
+    return float(re.sub("[^0-9,]", "", string).replace(",", "."))
 
 
 def get_food_informations(item: str):
@@ -61,6 +62,8 @@ def get_food_informations(item: str):
             "product_link": product_link,
         }
 
-
 BASE_URL = "https://fddb.info"
 SEARCH_URL = "https://fddb.info/db/de/suche/?udd=0&cat=site-de&search={}"
+
+if __name__ == "__main__":
+    print(get_food_informations("Apfel"))
