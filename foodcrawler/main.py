@@ -5,7 +5,7 @@ import sys
 import xlwings as xw
 import random
 from tqdm import tqdm
-from foodcrawler.parsing import get_food_informations
+from foodcrawler.parsing.fddb import get_food_informations
 
 
 DATA_SOURCES = {
@@ -20,6 +20,15 @@ def main():
     wb: xw.Book = xw.books[workbook_name]
     ws: xw.Sheet = wb.sheets["Ingredients"]
     num_row = ws.range('A1').end('down').row
+
+    if len(sys.argv) == 3:
+        data_source = sys.argv[2].lower()
+        assert data_source in DATA_SOURCES, "Please provide a valid data source"
+        food_info_func = DATA_SOURCES[data_source]
+    else:
+        print("No data source provided, using fddb")
+        food_info_func = DATA_SOURCES["fddb"]
+
     print("Found {} rows in the sheet".format(num_row))
     # collect data
     content_list = ws.range((2, 1), (num_row, 2)).value
@@ -29,7 +38,7 @@ def main():
         original_name, fddb_name = content
         try:
             if fddb_name is None:
-                informations = get_food_informations(content[0])
+                informations = food_info_func(content[0])
                 food_items[i + 2] = informations
                 time.sleep(random.randint(1, 10) / 10)
         except Exception as e:

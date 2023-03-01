@@ -20,5 +20,6 @@ def get_sum_formulas(number_columns: int):
     for column in inner_values:
         print(f'=SUMME({column})')
 
+
 if __name__ == "__main__":
     get_sum_formulas(30)
