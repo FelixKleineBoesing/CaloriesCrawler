@@ -8,7 +8,8 @@ FDDB_SEARCH_URL = "https://fddb.info/db/de/suche/?udd=0&cat=site-de&search={}"
 
 
 def keep_numerical_values(string: str):
-    return float(re.sub("[^0-9]", "", string))
+    # keep only numerical values and comma as decimal separator
+    return float(re.sub("[^0-9,]", "", string).replace(",", "."))
 
 
 def get_food_informations(item: str):
@@ -64,4 +65,3 @@ def get_food_informations(item: str):
             "relation_numerical": relation_numerical,
             "product_link": product_link,
         }
-
